@@ -1,0 +1,57 @@
+# ==========================================
+# ECOMMERCE API - ENVIRONMENT VARIABLES
+# ==========================================
+
+# ==========================================
+# DATABASE CONFIGURATION
+# ==========================================
+
+DB_HOST = localhost
+DB_USER = postgres
+DB_PASSWORD = admin
+DB_NAME = ecom
+DB_PORT = 5432
+DB_SSL_MODE=disable
+
+# ==========================================
+# SERVER CONFIGURATION
+# ==========================================
+SERVER_PORT=8080
+ENVIRONMENT=development
+
+# ==========================================
+# JWT AUTHENTICATION
+# ==========================================
+# ⚠️ IMPORTANT: Change this to a secure random string!
+# Generated secure secret (copy one from above):
+JWT_SECRET=GruaGp3Z27oBnGiZ62kYi+jP7Y1Skj+KYG3GhVciVcU=
+JWT_EXPIRY=24h
+
+# ==========================================
+# STRIPE PAYMENT (Optional - for later)
+# ==========================================
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+STRIPE_PUBLISH_KEY=pk_test_your_stripe_publish_key_here
+
+# ==========================================
+# EMAIL CONFIGURATION (Optional - for later)
+# ==========================================
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASSWORD=your_app_specific_password
+SMTP_FROM=noreply@ecommerce.com
+
+# ==========================================
+# FILE UPLOAD
+# ==========================================
+MAX_FILE_SIZE=10485760
+UPLOAD_DIR=./uploads
+
+# ==========================================
+# NOTES:
+# ==========================================
+# 1. Never commit this file to Git!
+# 2. Add .env to your .gitignore file
+# 3. Use different secrets for production
+# 4. Keep JWT_SECRET secure and private
