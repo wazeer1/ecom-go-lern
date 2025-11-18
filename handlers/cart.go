@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"github.com/yourusername/ecommerce-api/models"
+	"github.com/wazeer1/ecommerce-api/models"
 )
 
 type AddToCartRequest struct {

@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/yourusername/ecommerce-api/models"
+	"github.com/wazeer1/ecommerce-api/models"
 	"gorm.io/gorm"
 )
 

@@ -5,10 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/yourusername/ecommerce-api/config"
-	"github.com/yourusername/ecommerce-api/database"
-	"github.com/yourusername/ecommerce-api/middleware"
-	"github.com/yourusername/ecommerce-api/routes"
+	"github.com/wazeer1/ecommerce-api/config"
+	"github.com/wazeer1/ecommerce-api/database"
+	"github.com/wazeer1/ecommerce-api/middleware"
+	"github.com/wazeer1/ecommerce-api/routes"
 )
 
 func main() {

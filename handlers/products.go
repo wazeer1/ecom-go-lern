@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"github.com/yourusername/ecommerce-api/models"
+	"github.com/wazeer1/ecommerce-api/services"
 )
 
 type CreateProductRequest struct {
@@ -23,29 +23,13 @@ type CreateProductRequest struct {
 
 // GetProducts retrieves all products with pagination
 func GetProducts(c *gin.Context, db *gorm.DB) {
-    var products []models.Product
-
     page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
     limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
     category := c.Query("category")
     search := c.Query("search")
 
-    offset := (page - 1) * limit
-
-    query := db
-
-    if category != "" {
-        query = query.Where("category = ?", category)
-    }
-
-    if search != "" {
-        query = query.Where("name ILIKE ? OR description ILIKE ?", "%"+search+"%", "%"+search+"%")
-    }
-
-    var total int64
-    query.Model(&models.Product{}).Count(&total)
-
-    if err := query.Offset(offset).Limit(limit).Find(&products).Error; err != nil {
+    products, total, err := services.ListProducts(db, page, limit, category, search)
+    if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch products"})
         return
     }
@@ -62,8 +46,8 @@ func GetProducts(c *gin.Context, db *gorm.DB) {
 func GetProductByID(c *gin.Context, db *gorm.DB) {
     id := c.Param("id")
 
-    var product models.Product
-    if err := db.Preload("Reviews").First(&product, id).Error; err != nil {
+    product, err := services.GetProductByID(db, id)
+    if err != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
         return
     }
@@ -79,7 +63,7 @@ func CreateProduct(c *gin.Context, db *gorm.DB) {
         return
     }
 
-    product := models.Product{
+    in := services.CreateProductInput{
         Name:        req.Name,
         Description: req.Description,
         Price:       req.Price,
@@ -90,7 +74,8 @@ func CreateProduct(c *gin.Context, db *gorm.DB) {
         Image:       req.Image,
     }
 
-    if err := db.Create(&product).Error; err != nil {
+    product, err := services.CreateProduct(db, in)
+    if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create product"})
         return
     }
@@ -102,19 +87,25 @@ func CreateProduct(c *gin.Context, db *gorm.DB) {
 func UpdateProduct(c *gin.Context, db *gorm.DB) {
     id := c.Param("id")
 
-    var product models.Product
-    if err := db.First(&product, id).Error; err != nil {
-        c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
-        return
-    }
-
     var req CreateProductRequest
     if err := c.ShouldBindJSON(&req); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
 
-    if err := db.Model(&product).Updates(req).Error; err != nil {
+    in := services.UpdateProductInput{
+        Name:        req.Name,
+        Description: req.Description,
+        Price:       req.Price,
+        Stock:       req.Stock,
+        Category:    req.Category,
+        SKU:         req.SKU,
+        Discount:    req.Discount,
+        Image:       req.Image,
+    }
+
+    product, err := services.UpdateProduct(db, id, in)
+    if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update"})
         return
     }
@@ -126,7 +117,7 @@ func UpdateProduct(c *gin.Context, db *gorm.DB) {
 func DeleteProduct(c *gin.Context, db *gorm.DB) {
     id := c.Param("id")
 
-    if err := db.Delete(&models.Product{}, id).Error; err != nil {
+    if err := services.DeleteProduct(db, id); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete"})
         return
     }

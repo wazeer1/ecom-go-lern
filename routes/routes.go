@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"github.com/yourusername/ecommerce-api/handlers"
-	"github.com/yourusername/ecommerce-api/middleware"
+	"github.com/wazeer1/ecommerce-api/handlers"
+	"github.com/wazeer1/ecommerce-api/middleware"
 )
 
 func SetupRoutes(router *gin.Engine, db *gorm.DB) {

@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yourusername/ecommerce-api/models"
-	"github.com/yourusername/ecommerce-api/utils"
+	"github.com/wazeer1/ecommerce-api/models"
+	"github.com/wazeer1/ecommerce-api/utils"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -19,6 +19,7 @@ type RegisterRequest struct {
 func Register(c *gin.Context, db *gorm.DB) {
   var req RegisterRequest
   if err := c.ShouldBindJSON(&req); err != nil {
+    print(err)
     c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
     return
   }
